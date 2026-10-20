@@ -1,0 +1,12 @@
+kind	query	reference	output
+false_positive	universidad nacional autónoma de méxxii	universidad nacional autonoma de mexxii	universidad nacional autónoma de méxic
+false_positive	bvva ban	bvva ban	bbva ban
+wrong_fix	cox	cos	col
+false_positive	Home Depot Ecageec	home depot ecageec	Home Depot Ecatepe
+missed	home dept	home depo	home dept
+false_positive	basílica de guadsupe	basilica de guadsupe	basílica de guadalup
+missed	hoe	hom	hoe
+false_positive	puerto vayart	puerto vayart	puerto vallar
+false_positive	galíeas monterrey	galieas monterrey	galrias monterrey
+false_positive	basílica de guaaupe	basilica de guaaupe	basílica de guadalu
+false_positive	costco sattélu	costco sattelu	costco satéli

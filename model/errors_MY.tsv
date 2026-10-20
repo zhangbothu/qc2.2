@@ -1,0 +1,18 @@
+kind	query	reference	output
+missed	tma	tam	tma
+missed	koeala lumpur 	kuala lumpur	koeala lumpur 
+missed	koeala lumpur internationa	kuala lumpur internationa	koeala lumpur internationa
+missed	petronas tai	petronas twi	petronas tai
+missed	sunway pyrz	sunway pyra	sunway pyrz
+wrong_fix	kuala loempur cit centre kala l	kuala lumpur city centre kuala l	kuala loempur city centre kuala l
+missed	Stesen Pasar Seni Kuala Loempur 	stesen pasar seni kuala lumpur	Stesen Pasar Seni Kuala Loempur 
+missed	menara koeala lumpur	menara kuala lumpur	menara koeala lumpur
+missed	koeala lumpur city centre	kuala lumpur city centre	koeala lumpur city centre
+missed	kjal	kual	kjal
+false_positive	ioh	ioh	ipo
+missed	Stesen Sentral Kuala Lun	stesen sentral kuala lum	Stesen Sentral Kuala Lun
+missed	stesen sentral kial	stesen sentral kual	stesen sentral kial
+missed	pantai cenang lanqawi 	pantai cenang langkawi	pantai cenang lanqawi 
+missed	kuala loempur international	kuala lumpur international	kuala loempur international
+false_positive	Batu Caes	batu caes	Batu Cave
+missed	Kuala Loempur 	kuala lumpur	Kuala Loempur 

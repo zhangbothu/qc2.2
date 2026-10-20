@@ -1,0 +1,12 @@
+kind	query	reference	output
+missed	satr	sate	satr
+missed	Gand 	grand	Gand 
+missed	semarag	semaran	semarag
+wrong_fix	psa	pas	pus
+missed	Taggnerang 	tangerang	Taggnerang 
+wrong_fix	Jalwn Sdirmqn	jalan sdirmqn	Jalan Sudirma
+false_positive	stasiun maggarqi	stasiun maggarqi	stasiun manggara
+missed	satr 	sate	satr 
+missed	semran 	semarang	semran 
+missed	pnata	panta	pnata
+missed	sate khsa	sate khas	sate khsa

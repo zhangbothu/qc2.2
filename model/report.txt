@@ -1,0 +1,32 @@
+=== GB ===
+resources : GB vocab=366 symspellKeys=5153 bigrams=90 knownTypos=306 errorOps=392 trustFreq=100 triplesKept=1291 dropped={distance_too_large=25, wrong_is_valid_word=2}
+training  : 1306 listwise examples, 1 typos not recalled, train top1=0.977
+model     : is_original=-1.769 edit_distance=-0.486 relative_distance=-1.003 channel_logprob=0.148 log_freq=0.539 log_freq_gain=0.439 known_log_count=1.360 phonetic_match=-0.229 first_char_match=1.646 length_diff=-2.334 is_split=-0.786 original_oov=-2.575 prefix_candidate=-0.561 | context_weight=0.25 accept_threshold=1.00
+baseline  : queries=352 needFix=205 | precision=0.979 recall=0.932 F0.5=0.970 accuracy=0.952 FPR=0.0204 overCompletion=0 | latency p50=17us p95=71us p99=105us max=181us   (default weights)
+test      : queries=352 needFix=205 | precision=0.966 recall=0.980 F0.5=0.969 accuracy=0.974 FPR=0.0340 overCompletion=0 | latency p50=16us p95=72us p99=92us max=165us
+test typos: typos=338 | recall@candidates=1.000 top1-accuracy=0.967 left-unchanged=0
+
+=== ID ===
+resources : ID vocab=379 symspellKeys=4535 bigrams=79 knownTypos=327 errorOps=351 trustFreq=53 triplesKept=1188 dropped={distance_too_large=54, wrong_is_valid_word=11}
+training  : 1188 listwise examples, 0 typos not recalled, train top1=0.955
+model     : is_original=-2.211 edit_distance=-0.434 relative_distance=-0.979 channel_logprob=0.203 log_freq=0.507 log_freq_gain=0.407 known_log_count=1.603 phonetic_match=-0.132 first_char_match=1.754 length_diff=-1.938 is_split=-0.000 original_oov=-2.869 prefix_candidate=-0.378 | context_weight=1.00 accept_threshold=5.00
+baseline  : queries=324 needFix=210 | precision=0.980 recall=0.914 F0.5=0.966 accuracy=0.941 FPR=0.0088 overCompletion=0 | latency p50=14us p95=51us p99=61us max=127us   (default weights)
+test      : queries=324 needFix=210 | precision=0.985 recall=0.952 F0.5=0.978 accuracy=0.966 FPR=0.0088 overCompletion=0 | latency p50=12us p95=45us p99=60us max=69us
+test typos: typos=306 | recall@candidates=1.000 top1-accuracy=0.745 left-unchanged=63
+
+=== MX ===
+resources : MX vocab=420 symspellKeys=5837 bigrams=98 knownTypos=353 errorOps=406 trustFreq=84 triplesKept=1454 dropped={distance_too_large=41, wrong_is_valid_word=2}
+training  : 1454 listwise examples, 0 typos not recalled, train top1=0.983
+model     : is_original=-1.566 edit_distance=-0.459 relative_distance=-0.841 channel_logprob=0.189 log_freq=0.652 log_freq_gain=0.552 known_log_count=0.636 phonetic_match=-0.207 first_char_match=1.708 length_diff=-2.040 is_split=-0.000 original_oov=-2.073 prefix_candidate=0.190 | context_weight=1.00 accept_threshold=-1.00
+baseline  : queries=409 needFix=258 | precision=0.948 recall=0.915 F0.5=0.941 accuracy=0.929 FPR=0.0464 overCompletion=0 | latency p50=16us p95=65us p99=90us max=117us   (default weights)
+test      : queries=409 needFix=258 | precision=0.966 recall=0.988 F0.5=0.970 accuracy=0.973 FPR=0.0530 overCompletion=0 | latency p50=14us p95=64us p99=79us max=114us
+test typos: typos=384 | recall@candidates=0.997 top1-accuracy=0.979 left-unchanged=1
+
+=== MY ===
+resources : MY vocab=461 symspellKeys=5459 bigrams=80 knownTypos=391 errorOps=386 trustFreq=20 triplesKept=1304 dropped={distance_too_large=37, wrong_is_valid_word=3}
+training  : 1290 listwise examples, 2 typos not recalled, train top1=0.957
+model     : is_original=-2.015 edit_distance=-0.652 relative_distance=-1.130 channel_logprob=0.152 log_freq=0.495 log_freq_gain=0.395 known_log_count=1.071 phonetic_match=-0.114 first_char_match=2.511 length_diff=-2.058 is_split=-0.000 original_oov=-1.848 prefix_candidate=0.936 | context_weight=0.50 accept_threshold=2.50
+baseline  : queries=370 needFix=240 | precision=0.986 recall=0.904 F0.5=0.969 accuracy=0.935 FPR=0.0077 overCompletion=0 | latency p50=13us p95=58us p99=81us max=111us   (default weights)
+test      : queries=370 needFix=240 | precision=0.987 recall=0.938 F0.5=0.977 accuracy=0.954 FPR=0.0154 overCompletion=0 | latency p50=12us p95=55us p99=83us max=109us
+test typos: typos=317 | recall@candidates=0.972 top1-accuracy=0.890 left-unchanged=25
+

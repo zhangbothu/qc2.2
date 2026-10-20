@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map Sug Spelling Correction</title>
+<style>
+  :root { --bg:#0f172a; --card:#111c33; --line:#22314f; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --ok:#4ade80; --warn:#fbbf24; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 20px 60px; }
+  h1 { font-size: 24px; margin: 0 0 6px; }
+  p.lead { color: var(--muted); margin: 0 0 28px; line-height: 1.5; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 18px; }
+  .row { display:flex; gap: 10px; flex-wrap: wrap; }
+  select, input { background:#0b1324; color: var(--text); border:1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+  select { flex: 0 0 auto; }
+  input { flex: 1 1 280px; min-width: 0; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .out { font-size: 22px; margin: 4px 0 10px; word-break: break-word; white-space: pre-wrap; }
+  .chg { color: var(--ok); font-weight: 600; }
+  .meta { display:flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+  table { width:100%; border-collapse: collapse; font-size: 14px; margin-top: 14px; }
+  th, td { text-align:left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; }
+  .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background:#1e293b; color: var(--muted); }
+  .pill.prefix { color: var(--warn); }
+  .examples button { background: transparent; color: var(--accent); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+  .examples button:hover { border-color: var(--accent); }
+  .examples { display:flex; gap: 8px; flex-wrap: wrap; }
+  .err { color: #f87171; }
+  .empty { color: var(--muted); }
+  @media (max-width: 560px) { .out { font-size: 18px; } th:nth-child(4), td:nth-child(4) { display:none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Map Sug spelling correction</h1>
+  <p class="lead">Type the way a user types into the map search box. Each keystroke is corrected in real time; an
+    unfinished last word stays a prefix (<code>aple</code> becomes <code>appl</code>, not <code>apple</code>) so Sug can complete it.
+    Add a trailing space to mark the last word as finished.</p>
+
+  <div class="card">
+    <div class="row">
+      <select id="country" aria-label="Country"></select>
+      <input id="q" placeholder="e.g. ecatepec de moaalos" autocomplete="off" spellcheck="false" autofocus>
+    </div>
+    <div class="hint">Examples</div>
+    <div class="examples" id="examples"></div>
+  </div>
+
+  <div class="card" id="result"><div class="empty">Start typing to see the corrected input.</div></div>
+</main>
+<script>
+const EXAMPLES = {
+  MX: ["ecatepec de moaalos", "starbucks coefe", "palacio de hierro polamco", "aeropuerto internacional benito juares ", "coyoacna"],
+  GB: ["aple", "starbucks coefe", "picadilly circ", "kings cross staton ", "buckingam pal"],
+  MY: ["petronas twin towrs", "jalan bukit bintamg", "kuala lumpr", "mid valey meg", "batu cavse "],
+  ID: ["bandara soekarno hata", "stasiun gamb", "jalan sudirmn ", "monumen nasionl", "pasar tanah abamg"],
+};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+let seq = 0;
+
+async function loadCountries() {
+  try {
+    const res = await fetch("/api/countries");
+    const list = await res.json();
+    $("country").innerHTML = list.map((c) => `<option value="${c.code}">${c.code} · ${esc(c.name)}</option>`).join("");
+  } catch (e) {
+    $("country").innerHTML = ["MX","GB","MY","ID"].map((c) => `<option>${c}</option>`).join("");
+  }
+  renderExamples();
+}
+
+function renderExamples() {
+  const cc = $("country").value;
+  $("examples").innerHTML = (EXAMPLES[cc] || []).map((e) => `<button type="button" data-q="${esc(e)}">${esc(e.trimEnd())}${e.endsWith(" ") ? " ␣" : ""}</button>`).join("");
+  $("examples").querySelectorAll("button").forEach((b) => b.onclick = () => { $("q").value = b.dataset.q; run(); $("q").focus(); });
+}
+
+async function run() {
+  const q = $("q").value;
+  const my = ++seq;
+  if (!q.trim()) { $("result").innerHTML = '<div class="empty">Start typing to see the corrected input.</div>'; return; }
+  try {
+    const t0 = performance.now();
+    const res = await fetch(`/api/correct?country=${encodeURIComponent($("country").value)}&q=${encodeURIComponent(q)}`);
+    const rtt = performance.now() - t0;
+    const r = await res.json();
+    if (my !== seq) return;
+    if (!res.ok) { $("result").innerHTML = `<div class="err">${esc(r.error || "Request failed")}</div>`; return; }
+    const out = r.tokens.length ? highlight(r) : esc(r.corrected);
+    $("result").innerHTML = `
+      <div class="out">${out}</div>
+      <div class="meta">
+        <span>${r.changed ? "Corrected" : "No correction needed"}</span>
+        ${r.changed ? `<span>confidence ${(r.confidence * 100).toFixed(0)}%</span>` : ""}
+        <span>engine ${(r.latencyMicros / 1000).toFixed(2)} ms${r.cached ? " (cache)" : ""}</span>
+        <span>round trip ${rtt.toFixed(1)} ms</span>
+      </div>
+      <table>
+        <thead><tr><th>Typed</th><th>Output</th><th>Kind</th><th>Candidates</th><th>Recall channels</th></tr></thead>
+        <tbody>${r.tokens.map((t) => `<tr>
+          <td>${esc(t.original)}</td>
+          <td class="${t.changed ? "chg" : ""}">${esc(t.corrected)}</td>
+          <td><span class="pill ${t.complete ? "" : "prefix"}">${t.complete ? "word" : "prefix"}</span></td>
+          <td>${t.candidates}</td>
+          <td>${t.changed ? esc(t.sources.replace(/[\[\]]/g, "")) : "—"}</td></tr>`).join("")}</tbody>
+      </table>`;
+  } catch (e) {
+    if (my === seq) $("result").innerHTML = '<div class="err">The correction service is not reachable.</div>';
+  }
+}
+
+function highlight(r) {
+  return r.tokens.map((t) => t.changed ? `<span class="chg">${esc(t.corrected)}</span>` : esc(t.corrected)).join(" ")
+    + (r.corrected.endsWith(" ") ? " " : "");
+}
+
+$("q").addEventListener("input", run);
+$("country").addEventListener("change", () => { renderExamples(); run(); });
+loadCountries();
+</script>
+</body>
+</html>

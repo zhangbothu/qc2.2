@@ -1,0 +1,10 @@
+kind	query	reference	output
+missed	hyde pak	hyde par	hyde pak
+wrong_fix	watio	waitr	stati
+false_positive	eirqte	eirqte	emirat
+false_positive	st pnc	st pnc	st pan
+false_positive	westminster abey	westminster abey	westminster abbe
+missed	Prt	pre	Prt
+false_positive	paddington stgion	paddington stgion	paddington statio
+false_positive	Wtsfie	wtsfie	Westfi
+wrong_fix	roal london hosp	royal london hosp	road london hosp
